@@ -1,20 +1,56 @@
 # vim: ts=4 sw=4 expandtab
 class Content::Translation < ActiveRecord::Base
-    extend Content
-    extend Batchelor
+  extend Content
+  extend Batchelor
 
-    self.table_name = 'translation'
-    self.primary_keys = :ayah_key, :resource_id # composite primary key which is a combination of ayah_key & resource_id
+  self.table_name = 'translation'
+  self.primary_keys = :ayah_key, :resource_id # composite primary key which is a combination of ayah_key & resource_id
 
-    # relationships
-    belongs_to :resource, class_name: 'Content::Resource'
-    belongs_to :ayah,     class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
+  # relationships
+  belongs_to :resource, class_name: 'Content::Resource'
+  belongs_to :ayah,     class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
 
-    # scope
-    # default_scope { where resource_id: 17 } # NOTE uncomment or modify to disable/experiment on the elasticsearch import
-    scope :ordered,     ->              { joins( 'join quran.ayah on translation.ayah_key = ayah.ayah_key' ).order( 'translation.resource_id asc, ayah.surah_id asc, ayah.ayah_num asc' ) }
-    scope :resource_id, ->(id_resource) { ordered.where( resource_id: id_resource ) }
-    scope :resource_17, -> { where resource_id: 17 }
+  scope :ordered,     ->              { joins( 'join quran.ayah on translation.ayah_key = ayah.ayah_key' ).order( 'translation.resource_id asc, ayah.surah_id asc, ayah.ayah_num asc' ) }
+  scope :resource_id, ->(id_resource) { ordered.where( resource_id: id_resource ) }
+  scope :resource_17, -> { where resource_id: 17 }
+
+  searchkick merge_mappings: true, mappings: {
+    translation: {
+      _all: {
+        enabled: false
+      },
+      properties: {
+        text: {
+          type: "string",
+          similarity: "my_bm25",
+          term_vector: "with_positions_offsets_payloads",
+          fields: {
+            stemmed: {
+              type: "string",
+              similarity: "my_bm25",
+              term_vector: "with_positions_offsets_payloads",
+              analyzer: "standard"
+            }
+          }
+        }
+      }
+    }
+  }, settings: YAML.load(File.read(File.expand_path( "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__ )))
+
+  def search_id
+    "#{self.resource_id}_#{search_data['ayah']['ayah_key']}"
+  end
+
+  def search_data
+    search_data = self.as_json(include: :ayah)
+    search_data.merge({
+      _index: "translation-#{self.resource.language_code}",
+      resource: self.resource,
+      language: self.resource.language,
+      source: self.resource.source,
+      author: self.resource.author
+    })
+  end
 
     def self.import( options = {} )
         # we want to loop through each language code (in general)

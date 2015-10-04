@@ -55,8 +55,10 @@ gem 'composite_primary_keys', {
 gem 'awesome_print'
 
 # Elasticsearch
-gem 'elasticsearch-model'
-gem 'elasticsearch-rails'
+# gem 'elasticsearch-model'
+# gem 'elasticsearch-rails'
+
+gem 'searchkick'
 
 
 # This is for batching the Content::Translation, batches based on the string primary keys
