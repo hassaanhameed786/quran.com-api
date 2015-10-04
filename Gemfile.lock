@@ -31,6 +31,15 @@ GIT
       rails (>= 3.0, < 4.3)
       rake (>= 0.8.7)
 
+GIT
+  remote: git@github.com:mmahalwy/searchkick.git
+  revision: 8cb6ffabaf076cd44d4011c08d666e2c8a7be635
+  specs:
+    searchkick (0.9.1)
+      activemodel
+      elasticsearch (>= 1)
+      hashie
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -139,7 +148,7 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
-    hashie (3.4.1)
+    hashie (3.4.2)
     hirb (0.7.3)
     hitimes (1.2.2)
     httparty (0.13.4)
@@ -301,10 +310,6 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
-    searchkick (0.9.1)
-      activemodel
-      elasticsearch (>= 1)
-      hashie
     shellany (0.0.1)
     slop (3.6.0)
     spring (1.3.6)
@@ -374,7 +379,7 @@ DEPENDENCIES
   ruby-progressbar
   sass-rails (~> 5.0.1)
   sdoc (~> 0.4.0)
-  searchkick
+  searchkick!
   spring
   spring-commands-rspec
   therubyracer

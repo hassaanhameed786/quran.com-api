@@ -58,7 +58,7 @@ gem 'awesome_print'
 # gem 'elasticsearch-model'
 # gem 'elasticsearch-rails'
 
-gem 'searchkick'
+gem 'searchkick', git: 'git@github.com:mmahalwy/searchkick.git'
 
 
 # This is for batching the Content::Translation, batches based on the string primary keys
