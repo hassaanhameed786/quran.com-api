@@ -8,7 +8,7 @@ class Quran::TextFont < ActiveRecord::Base
   belongs_to :ayah, class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
 
   searchkick merge_mappings: true, mappings: {
-    "text-font": {
+    "text-font" => {
       _all: {
         enabled: true
       },
@@ -73,7 +73,7 @@ class Quran::TextFont < ActiveRecord::Base
     search_data['ayah']['ayah_key'].gsub!(/:/, '_')
 
     search_data.merge({
-      _id: self.id.gsub(/:/, '_')
+      _id: self.id.gsub(/:/, '_'),
       resource: self.resource,
       language: self.resource.language
     })

@@ -4,7 +4,7 @@ class Content::Transliteration < ActiveRecord::Base
     extend Batchelor
 
     self.table_name = 'transliteration'
-    self.primary_keys = :resource_id, :ayah_key
+    self.primary_keys = :ayah_key, :resource_id
 
     belongs_to :resource, class_name: 'Content::Resource'
     belongs_to :ayah,     class_name: 'Quran::Ayah', foreign_key: 'ayah_key'

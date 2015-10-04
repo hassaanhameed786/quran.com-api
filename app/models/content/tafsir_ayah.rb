@@ -4,7 +4,7 @@ class Content::TafsirAyah < ActiveRecord::Base
   extend Batchelor
 
   self.table_name = 'tafsir_ayah'
-  self.primary_keys = :tafsir_id, :ayah_key
+  self.primary_keys = :ayah_key, :tafsir_id
 
   # relationships
   belongs_to :tafsir, class_name: 'Content::Tafsir'

@@ -35,16 +35,16 @@ class Content::Translation < ActiveRecord::Base
         }
       }
     }
-  }, settings: YAML.load(File.read(File.expand_path( "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__ )))
+  }, settings: YAML.load(File.read(File.expand_path( "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__ ))), index_name: 'translation'
 
-  def search_id
-    "#{self.resource_id}_#{search_data['ayah']['ayah_key']}"
+  def self.document_type
+    "translation"
   end
 
   def search_data
+    self.id = "#{self.resource_id}_#{search_data['ayah']['ayah_key']}"
     search_data = self.as_json(include: :ayah)
     search_data.merge({
-      _index: "translation-#{self.resource.language_code}",
       resource: self.resource,
       language: self.resource.language,
       source: self.resource.source,
