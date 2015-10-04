@@ -37,20 +37,16 @@ class Content::Translation < ActiveRecord::Base
     }
   }, settings: YAML.load(File.read(File.expand_path( "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__ ))), index_name: 'translation'
 
-  def self.document_type
-    "translation"
-  end
 
-  def search_data
-    self.id = "#{self.resource_id}_#{search_data['ayah']['ayah_key']}"
-    search_data = self.as_json(include: :ayah)
-    search_data.merge({
-      resource: self.resource,
-      language: self.resource.language,
-      source: self.resource.source,
-      author: self.resource.author
-    })
-  end
+  # def search_data
+    # search_data = self.as_json(include: :ayah)
+    # search_data.merge({
+    #   resource: self.resource,
+    #   language: self.resource.language,
+    #   source: self.resource.source,
+    #   author: self.resource.author
+    # })
+  # end
 
     def self.import( options = {} )
         # we want to loop through each language code (in general)
