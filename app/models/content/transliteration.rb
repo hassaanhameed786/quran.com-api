@@ -1,6 +1,6 @@
 class Content::Transliteration < ActiveRecord::Base
   extend Content
-  extend Batchelor
+  # extend Batchelor
 
   self.table_name = 'transliteration'
   self.primary_keys = :resource_id, :ayah_key
@@ -23,10 +23,13 @@ class Content::Transliteration < ActiveRecord::Base
                      analyzer: 'standard'
       indexes :stemmed, type: 'string', similarity: 'my_bm25',
                         term_vector: 'with_positions_offsets_payloads',
-                        analyzer: 'standard'
+                        analyzer: 'english'
       indexes :phonetic, type: 'string', similarity: 'my_bm25',
                          term_vector: 'with_positions_offsets_payloads',
                          analyzer: 'dbl_metaphone'
+      indexes :shingles, type: 'string', similarity: 'my_bm25',
+                         term_vector: 'with_positions_offsets_payloads',
+                         analyzer: 'shingle_analyzer'
     end
   end
 
