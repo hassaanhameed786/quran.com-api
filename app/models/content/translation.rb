@@ -82,6 +82,7 @@ class Content::Translation < ActiveRecord::Base
           index: "#{index_name}-#{language_code}",
           transform: transform,
           batch_size: 6236,
+          force: true,
           query: query
         }.merge(options)
 
